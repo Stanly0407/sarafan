@@ -14,18 +14,28 @@ public class MessageController {
 
     private int counter = 4;
 
-    private List<Map<String, String>> messages = new ArrayList<>(){{
-        add(new HashMap<>() {{put("id", "1"); put("text", "First message");}});
-        add(new HashMap<>() {{put("id", "2"); put("text", "Second message");}});
-        add(new HashMap<>() {{put("id", "3"); put("text", "Third message");}});
+    private List<Map<String, String>> messages = new ArrayList<>() {{
+        add(new HashMap<>() {{
+            put("id", "1");
+            put("text", "First message");
+        }});
+        add(new HashMap<>() {{
+            put("id", "2");
+            put("text", "Second message");
+        }});
+        add(new HashMap<>() {{
+            put("id", "3");
+            put("text", "Third message");
+        }});
     }};
 
     @GetMapping
-    public List<Map<String, String>> list(){
+    public List<Map<String, String>> list() {
         return messages;
     }
+
     @GetMapping("{id}")
-    public Map<String, String> getOne(@PathVariable String id){
+    public Map<String, String> getOne(@PathVariable String id) {
         return getMessage(id); // чтоб выдать 404, если полученный id не соответсвует - для этого создаем exception
 
     }
@@ -38,14 +48,14 @@ public class MessageController {
     }
 
     @PostMapping
-    public Map<String, String>  create (@RequestBody Map<String, String> message){
-       message.put("id", String.valueOf(counter++)); //получаем новый message от юзера, добавляем ему id
+    public Map<String, String> create(@RequestBody Map<String, String> message) {
+        message.put("id", String.valueOf(counter++)); //получаем новый message от юзера, добавляем ему id
         messages.add(message);
         return message;
     }
 
     @PutMapping("{id}")
-    public Map<String, String> update (@PathVariable String id, @RequestBody Map<String, String> message){
+    public Map<String, String> update(@PathVariable String id, @RequestBody Map<String, String> message) {
         Map<String, String> messageFromDb = getMessage(message.get("id"));
         messageFromDb.putAll(message);
         messageFromDb.put("id", id);
@@ -53,8 +63,9 @@ public class MessageController {
     }
 
     @DeleteMapping("{id}")
-    public void delete(){
-        getMessage()
+    public void delete(@PathVariable String id) {
+        Map<String, String> message = getMessage(id);
+        messages.remove(message);
     }
 
 }
